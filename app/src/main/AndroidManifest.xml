@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sundeep.Rado_Whatsapp_Toolkit">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+
+    <application
+        android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity"
+            android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
+
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.ViewImageActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity"
+            android:theme="@style/ViewImageActivityTheme" />
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity" />
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.FreeHandCrop.FreeHandCropActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity" >
+            </activity>
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.CropResultReceiver.CropResultReceiver"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity" />
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.FreeHandCrop.FreeHandCropAdjust"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.NormalCrop.sample.CropGalleryActivity" />
+
+
+        <activity
+            android:name="com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.MagicToolCrop.CutOutActivity"/>
+
+    </application>
+
+</manifest>
