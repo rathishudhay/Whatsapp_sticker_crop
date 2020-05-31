@@ -49,7 +49,7 @@ public class SomeView extends View implements View.OnTouchListener {
     private PointF zoomPos;
     private boolean zooming = false;
     private Matrix matrix;
-    private Paint paint1;
+    private Paint paint1,dragBackgroundPaint;
     private BitmapShader shader;
     private int sizeOfMagnifier = 150;
     private Canvas bitmapCanvas;
@@ -122,6 +122,15 @@ public class SomeView extends View implements View.OnTouchListener {
         bitmapCanvas.setBitmap(bitmapCopy);
         bitmapCanvas.drawBitmap(bitmap,0,0,paint);
        // bitmapCanvas.drawBitmap(bitmap, null, new RectF(50, 0, 50, 0), paint);
+
+        dragBackgroundPaint=new Paint();
+        dragBackgroundPaint.setStyle(Paint.Style.STROKE);
+//        dragBackgroundPaint.setPathEffect(new DashPathEffect(new float[]{10, 10}, 3));
+        dragBackgroundPaint.setStrokeWidth(10);
+        dragBackgroundPaint.setColor(getResources().getColor(R.color.black));
+        dragBackgroundPaint.setStrokeJoin(Paint.Join.ROUND);
+        dragBackgroundPaint.setStrokeCap(Paint.Cap.ROUND);
+        dragBackgroundPaint.setAntiAlias(true);
     }
 
     public static int getScreenWidth() {
@@ -177,7 +186,9 @@ public class SomeView extends View implements View.OnTouchListener {
                 path.lineTo(point.x, point.y);
             }
         }
+        bitmapCanvas.drawPath(path,dragBackgroundPaint);
         bitmapCanvas.drawPath(path,paint);
+        canvas.drawPath(path,dragBackgroundPaint);
         canvas.drawPath(path, paint);
 //        this.setDrawingCacheEnabled(true);
 //        this.buildDrawingCache();
