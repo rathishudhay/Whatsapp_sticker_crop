@@ -53,6 +53,7 @@ public class SomeView extends View implements View.OnTouchListener {
     private BitmapShader shader;
     private int sizeOfMagnifier = 150;
     private Canvas bitmapCanvas;
+
 //Custom code end
 
 
@@ -199,7 +200,7 @@ public class SomeView extends View implements View.OnTouchListener {
 //            paint1 = new Paint();
             paint1.setShader(shader);
             matrix.reset();
-            if(zoomPos.x<300 && zoomPos.y<300){
+            if(zoomPos.x<(Resources.getSystem().getDisplayMetrics().widthPixels/2)){
                 int width = Resources.getSystem().getDisplayMetrics().widthPixels;
                 matrix.postScale(2f, 2f, zoomPos.x*2-width+150, zoomPos.y*2-150);
                 paint1.getShader().setLocalMatrix(matrix);

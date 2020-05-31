@@ -1,14 +1,19 @@
 package com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.FreeHandCrop;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Shader;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,9 +27,9 @@ public class FreeHandCropAdjustView extends View {
     //initial color
     private int paintColor = 0xFF660000;
     //canvas
-    private Canvas drawCanvas,colorCanvas,viewCanvas;
+    private Canvas drawCanvas,colorCanvas,viewCanvas,finalCanvas;
     //canvas bitmap
-    private Bitmap canvasBitmap,viewBitmap;
+    private Bitmap canvasBitmap,viewBitmap,finalBitmap;
 
     public static Bitmap backgroundBitmap;
     //brush sizes
@@ -35,6 +40,15 @@ public class FreeHandCropAdjustView extends View {
     private boolean isFirstTime = false;
 
     public static Bitmap backgroundOverlay;
+
+    private int sizeOfMagnifier = 150;
+    private Paint paint1;
+    private BitmapShader shader;
+    private PointF zoomPos;
+    private boolean zooming = false;
+    private Matrix matrix;
+
+
 
 
     public FreeHandCropAdjustView(Context context){
@@ -76,9 +90,15 @@ public class FreeHandCropAdjustView extends View {
         mergePaint=new Paint();
         mergePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
         viewBitmap=Bitmap.createBitmap(FreeHandCropActivity.fullBitmap.getWidth(),FreeHandCropActivity.fullBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        finalBitmap=Bitmap.createBitmap(FreeHandCropActivity.fullBitmap.getWidth(),FreeHandCropActivity.fullBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        finalCanvas=new Canvas(finalBitmap);
         viewCanvas=new Canvas(viewBitmap);
         viewCanvas.drawBitmap(FreeHandCropActivity.fullBitmap,0,0,new Paint());
 //        viewCanvas.drawBitmap(canvasBitmap,0,0,mergePaint);
+
+        zoomPos = new PointF(0, 0);
+        matrix = new Matrix();
+        paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     //size assigned to view
@@ -127,8 +147,46 @@ public class FreeHandCropAdjustView extends View {
         colorCanvas.drawBitmap(canvasBitmap,0,0,alphaPaint);
 //        Canvas alphaCanvas=new Canvas();
 //        alphaCanvas.drawBitmap(backgroundBitmap, 0, 0, canvasPaint);
+        finalCanvas.drawBitmap(viewBitmap,0,0,canvasPaint);
+        finalCanvas.drawBitmap(backgroundBitmap,0,0,canvasPaint);
         canvas.drawBitmap(viewBitmap, 0, 0, canvasPaint);
         canvas.drawBitmap(backgroundBitmap, 0, 0, canvasPaint);
+
+        if (zooming) {
+//            bitmap = getDrawingCache();
+            shader = new BitmapShader(finalBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+//            paint1 = new Paint();
+            paint1.setShader(shader);
+            matrix.reset();
+            if (zoomPos.x < (Resources.getSystem().getDisplayMetrics().widthPixels / 2)) {
+                int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+                matrix.postScale(2f, 2f, zoomPos.x * 2 - width + 150, zoomPos.y * 2 - 150);
+                paint1.getShader().setLocalMatrix(matrix);
+//                Log.d("PosLog123",zoomPos.x+" "+zoomPos.y);
+//            canvas.drawPath(path,paint1);
+                Paint magnifierBorderPaint = new Paint();
+                magnifierBorderPaint.setStyle(Paint.Style.STROKE);
+                magnifierBorderPaint.setStrokeWidth(4);
+                magnifierBorderPaint.setAntiAlias(true);
+                canvas.drawCircle(width - 150, 150, sizeOfMagnifier + 2, magnifierBorderPaint);
+
+                canvas.drawCircle(width - 150, 150, sizeOfMagnifier, paint1);
+            } else {
+                matrix.postScale(2f, 2f, zoomPos.x * 2 - 150, zoomPos.y * 2 - 150);
+                paint1.getShader().setLocalMatrix(matrix);
+                Log.d("PosLog123", zoomPos.x + " " + zoomPos.y);
+//            canvas.drawPath(path,paint1);
+                Paint magnifierBorderPaint = new Paint();
+                magnifierBorderPaint.setStyle(Paint.Style.STROKE);
+                magnifierBorderPaint.setStrokeWidth(4);
+                magnifierBorderPaint.setAntiAlias(true);
+                canvas.drawCircle(150, 150, sizeOfMagnifier + 2, magnifierBorderPaint);
+                canvas.drawCircle(150, 150, sizeOfMagnifier, paint1);
+            }
+        }
+
+
+
         canvas.drawPath(drawPath, drawPaint);
     }
 
@@ -158,6 +216,34 @@ public class FreeHandCropAdjustView extends View {
         }
         //redraw
         invalidate();
+
+
+
+//Custom code
+        int action = event.getAction();
+
+        zoomPos.x = event.getX();
+        zoomPos.y = event.getY();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                zooming = true;
+                this.invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                zooming = false;
+                this.invalidate();
+                break;
+
+            default:
+                break;
+        }
+
+
+//Custom code end
+
         return true;
     }
 

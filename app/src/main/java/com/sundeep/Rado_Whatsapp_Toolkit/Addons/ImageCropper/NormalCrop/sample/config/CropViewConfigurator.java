@@ -179,8 +179,8 @@ public class CropViewConfigurator implements StorageModule, ConfigChangeListener
 
     @Override
     public void onConfigChanged() {
-        int scale = (int) Math.max(1, cropIwaView.configureImage().getScale() * 100);
-        seekBarPreference.setValue(scale);
+//        int scale = (int) Math.max(1, cropIwaView.configureImage().getScale() * 100);
+//        seekBarPreference.setValue(scale);
     }
 
     private Paint getGridPaint() {

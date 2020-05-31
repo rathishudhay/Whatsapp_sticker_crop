@@ -29,11 +29,11 @@
 
         <include layout="@layout/pref_card_crop_mode" />
 
-        <include layout="@layout/pref_card_image" />
+<!--        <include layout="@layout/pref_card_image" />-->
 
 <!--        <include layout="@layout/pref_card_save" />-->
 
-        <include layout="@layout/pref_card_style" />
+<!--        <include layout="@layout/pref_card_style" />-->
 
 
     </com.yarolegovich.mp.MaterialPreferenceScreen>

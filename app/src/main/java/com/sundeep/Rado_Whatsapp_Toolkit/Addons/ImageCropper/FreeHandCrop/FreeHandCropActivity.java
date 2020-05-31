@@ -89,8 +89,6 @@ public class FreeHandCropActivity extends AppCompatActivity {
 
     //new
     public static int getScreenWidth() {
-
-
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
 
