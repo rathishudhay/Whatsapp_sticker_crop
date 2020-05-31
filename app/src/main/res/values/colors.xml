@@ -52,4 +52,6 @@
     <color name="lightRed">#f44141</color>
     <color name="darkRed">#cc3939</color>
 
+    <color name="brightGreen">#d6ff00</color>
+
 </resources>

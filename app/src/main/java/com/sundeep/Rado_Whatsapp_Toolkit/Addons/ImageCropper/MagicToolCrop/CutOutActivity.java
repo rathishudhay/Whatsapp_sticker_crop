@@ -29,6 +29,7 @@ import android.widget.SeekBar;
 
 import com.alexvasilkov.gestures.views.interfaces.GestureView;
 import com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.CropResultReceiver.CropResultReceiver;
+import com.sundeep.Rado_Whatsapp_Toolkit.Commons.BitmapTransform;
 import com.sundeep.Rado_Whatsapp_Toolkit.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -219,7 +220,8 @@ public class CutOutActivity extends AppCompatActivity {
 //            Bitmap image = BitmapUtility.getBorderedBitmap(this.drawView.getDrawingCache(), borderColor, BORDER_SIZE);
 //            task.execute(image);
             Intent intent = new Intent(getApplicationContext(), CropResultReceiver.class);
-            intent.putExtra("CroppedUri", getImageUri(getApplicationContext(),this.drawView.getDrawingCache()));
+        Bitmap clippedBitmap= BitmapTransform.trim(this.drawView.getDrawingCache());
+            intent.putExtra("CroppedUri", getImageUri(getApplicationContext(),clippedBitmap));
             startActivity(intent);
 
 //        } else {

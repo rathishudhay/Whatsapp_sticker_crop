@@ -51,7 +51,7 @@ public class SomeView extends View implements View.OnTouchListener {
     private Matrix matrix;
     private Paint paint1;
     private BitmapShader shader;
-    private int sizeOfMagnifier = 200;
+    private int sizeOfMagnifier = 150;
     private Canvas bitmapCanvas;
 //Custom code end
 
@@ -68,11 +68,12 @@ public class SomeView extends View implements View.OnTouchListener {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setPathEffect(new DashPathEffect(new float[]{10, 20}, 0));
-        paint.setStrokeWidth(5);
-        paint.setColor(Color.RED);
+        paint.setPathEffect(new DashPathEffect(new float[]{10, 10}, 3));
+        paint.setStrokeWidth(3);
+        paint.setColor(getResources().getColor(R.color.brightGreen));
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setAntiAlias(true);
 
         this.setOnTouchListener(this);
         points = new ArrayList<Point>();
@@ -97,7 +98,7 @@ public class SomeView extends View implements View.OnTouchListener {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(5);
-        paint.setColor(Color.RED);
+        paint.setColor(getResources().getColor(R.color.brightGreen));
 
         points = new ArrayList<Point>();
         bfirstpoint = false;
@@ -162,7 +163,7 @@ public class SomeView extends View implements View.OnTouchListener {
         Path path = new Path();
         boolean first = true;
 
-        for (int i = 0; i < points.size(); i += 2) {
+        for (int i = 0; i < points.size(); i ++) {
             Point point = points.get(i);
             if (first) {
                 first = false;
@@ -198,11 +199,32 @@ public class SomeView extends View implements View.OnTouchListener {
 //            paint1 = new Paint();
             paint1.setShader(shader);
             matrix.reset();
-            matrix.postScale(2f, 2f, zoomPos.x, zoomPos.y+200);
-            paint1.getShader().setLocalMatrix(matrix);
-            Log.d("PosLog123",zoomPos.x+" "+zoomPos.y);
+            if(zoomPos.x<300 && zoomPos.y<300){
+                int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+                matrix.postScale(2f, 2f, zoomPos.x*2-width+150, zoomPos.y*2-150);
+                paint1.getShader().setLocalMatrix(matrix);
+//                Log.d("PosLog123",zoomPos.x+" "+zoomPos.y);
 //            canvas.drawPath(path,paint1);
-            canvas.drawCircle(zoomPos.x, zoomPos.y-300, sizeOfMagnifier, paint1);
+                Paint magnifierBorderPaint=new Paint();
+                magnifierBorderPaint.setStyle(Paint.Style.STROKE);
+                magnifierBorderPaint.setStrokeWidth(4);
+                magnifierBorderPaint.setAntiAlias(true);
+                canvas.drawCircle(width-150,150,sizeOfMagnifier+2,magnifierBorderPaint);
+
+                canvas.drawCircle(width-150, 150, sizeOfMagnifier, paint1);
+            }else{
+                matrix.postScale(2f, 2f, zoomPos.x*2-150, zoomPos.y*2-150);
+                paint1.getShader().setLocalMatrix(matrix);
+                Log.d("PosLog123",zoomPos.x+" "+zoomPos.y);
+//            canvas.drawPath(path,paint1);
+                Paint magnifierBorderPaint=new Paint();
+                magnifierBorderPaint.setStyle(Paint.Style.STROKE);
+                magnifierBorderPaint.setStrokeWidth(4);
+                magnifierBorderPaint.setAntiAlias(true);
+                canvas.drawCircle(150,150,sizeOfMagnifier+2,magnifierBorderPaint);
+                canvas.drawCircle(150, 150, sizeOfMagnifier, paint1);
+            }
+
 //            canvas.restore();
         }
 //Custom code end
@@ -323,8 +345,13 @@ public class SomeView extends View implements View.OnTouchListener {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(5);
-        paint.setColor(Color.RED);
+        paint.setColor(getResources().getColor(R.color.brightGreen));
+
+        paint.setPathEffect(new DashPathEffect(new float[]{10, 10}, 3));
+        paint.setStrokeWidth(3);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+
 
         points = new ArrayList<Point>();
         bfirstpoint = false;

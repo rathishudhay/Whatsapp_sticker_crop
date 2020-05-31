@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.sundeep.Rado_Whatsapp_Toolkit.Addons.ImageCropper.MagicToolCrop.CutOut;
+import com.sundeep.Rado_Whatsapp_Toolkit.Commons.BitmapTransform;
 import com.sundeep.Rado_Whatsapp_Toolkit.R;
 
 import java.io.File;
@@ -95,7 +98,10 @@ public class FreeHandCropAdjust extends AppCompatActivity {
         backgroundCanvas.drawBitmap(background,0,0,paintBackground);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
         canvas.drawBitmap(background,0,0,paint);
-        Uri uri=getImageUri(getApplicationContext(),originalBitmapMutable);
+
+        Bitmap clippedBitmap=BitmapTransform.trim(originalBitmapMutable);
+
+        Uri uri=getImageUri(getApplicationContext(),clippedBitmap);
 //        Intent intent = new Intent(getApplicationContext(), CropResultReceiver.class);
 //        intent.putExtra("CroppedUri", uri);
 ////        Log.d("Intent","Intent");

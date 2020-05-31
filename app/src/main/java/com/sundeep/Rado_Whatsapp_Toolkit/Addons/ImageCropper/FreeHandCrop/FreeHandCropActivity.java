@@ -39,6 +39,7 @@ public class FreeHandCropActivity extends AppCompatActivity {
     private SomeView mSomeView;
     private Uri imageUri;
     public static Bitmap publicBitmap,fullBitmap;
+    double POINTS_DISTANCE=10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,12 @@ public class FreeHandCropActivity extends AppCompatActivity {
         getIntentData();
 
         if(mBitmap==null){
-            mBitmap = getResizedBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.bb),getScreenWidth(),getScreenWidth());
+            Bitmap tempBitmap=BitmapFactory.decodeResource(getResources(), R.drawable.bb);
+            float width=tempBitmap.getWidth();
+            float height=tempBitmap.getHeight();
+            float bitmapRatio=width/height;
+
+            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth(),getScreenWidth()/bitmapRatio);
         }
         mSomeView = new SomeView(this, mBitmap);
         LinearLayout layout = findViewById(R.id.layout);
@@ -69,7 +75,11 @@ public class FreeHandCropActivity extends AppCompatActivity {
             }
         }
         try {
-            mBitmap = getResizedBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri),getScreenWidth(),getScreenWidth());
+            Bitmap tempBitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            float width=tempBitmap.getWidth();
+            float height=tempBitmap.getHeight();
+            float bitmapRatio=width/height;
+            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth(),getScreenWidth()/bitmapRatio);
 
 //            mPhotoEditor.addImage(bitmap);
         }catch(Exception e){
@@ -88,7 +98,7 @@ public class FreeHandCropActivity extends AppCompatActivity {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+    public Bitmap getResizedBitmap(Bitmap bm, float newWidth, float newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -176,9 +186,19 @@ public class FreeHandCropActivity extends AppCompatActivity {
 
         List<Point> points = mSomeView.getPoints();
 
+        Log.d("pointsSize",""+points.size());
+
+//        draw path
+        Point prevPoint=points.get(0);
+        path.lineTo(prevPoint.x,prevPoint.y);
+
         for (int i = 0; i < points.size(); i++) {
-            path.lineTo(points.get(i).x, points.get(i).y);
+            if(getDistanceBetweenPoints(prevPoint,points.get(i))>POINTS_DISTANCE){
+                path.lineTo(points.get(i).x, points.get(i).y);
+                prevPoint=points.get(i);
+            }
         }
+        path.lineTo(points.get(points.size()-1).x, points.get(points.size()-1).y);
 
         canvas.drawPath(path, paint);
 
@@ -258,6 +278,13 @@ public class FreeHandCropActivity extends AppCompatActivity {
 //        return Uri.parse(path);
 
     }
+
+
+    public double getDistanceBetweenPoints(Point point1,Point point2){
+        double distance=Math.sqrt((point2.x-point1.x)*(point2.x-point1.x) + (point2.y-point1.y)*(point2.y-point1.y));
+        return distance;
+    }
+
 
 
 }
