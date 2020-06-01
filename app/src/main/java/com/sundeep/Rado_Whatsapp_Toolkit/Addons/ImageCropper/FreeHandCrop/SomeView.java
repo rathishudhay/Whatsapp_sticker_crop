@@ -120,6 +120,12 @@ public class SomeView extends View implements View.OnTouchListener {
         bitmapCopy=Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
         bitmapCanvas.setBitmap(bitmapCopy);
+//        if (bitmapCopy != null && !bitmapCopy.isRecycled()) {
+//            bitmapCopy.recycle();
+//            bitmapCopy = null;
+//        }
+//        bitmap.recycle();
+//        bitmapCopy.recycle();
         bitmapCanvas.drawBitmap(bitmap,0,0,paint);
        // bitmapCanvas.drawBitmap(bitmap, null, new RectF(50, 0, 50, 0), paint);
 
@@ -143,22 +149,22 @@ public class SomeView extends View implements View.OnTouchListener {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
-    }
+//    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+//        int width = bm.getWidth();
+//        int height = bm.getHeight();
+//        float scaleWidth = ((float) newWidth) / width;
+//        float scaleHeight = ((float) newHeight) / height;
+//        // CREATE A MATRIX FOR THE MANIPULATION
+//        Matrix matrix = new Matrix();
+//        // RESIZE THE BIT MAP
+//        matrix.postScale(scaleWidth, scaleHeight);
+//
+//        // "RECREATE" THE NEW BITMAP
+//        Bitmap resizedBitmap = Bitmap.createBitmap(
+//                bm, 0, 0, width, height, matrix, false);
+//        bm.recycle();
+//        return resizedBitmap;
+//    }
 
 
 

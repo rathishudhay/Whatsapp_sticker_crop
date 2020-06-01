@@ -22,7 +22,8 @@ import com.yarolegovich.mp.MaterialPreferenceScreen;
 public class CropActivity extends AppCompatActivity {
 
     private static final String EXTRA_URI = "https://pp.vk.me/c637119/v637119751/248d1/6dd4IPXWwzI.jpg";
-    private Button freeHandCrop;
+    private Button freeHandCrop, rotateImage,flipHorizontal,flipVertical;
+
 
 
     public static Intent callingIntent(Context context, Uri imageUri) {
@@ -48,7 +49,7 @@ public class CropActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        freeHandCrop=(Button)findViewById(R.id.AddNewImage);
+
         imageUri = getIntent().getParcelableExtra(EXTRA_URI);
         cropView = (CropIwaView) findViewById(R.id.crop_view);
         cropView.setImageUri(imageUri);
@@ -56,6 +57,12 @@ public class CropActivity extends AppCompatActivity {
         configurator = new CropViewConfigurator(cropView, cropPrefScreen);
         cropPrefScreen.setStorageModule(configurator);
         Log.d("InsideCropActivity","SyncTest123");
+
+        freeHandCrop=(Button)findViewById(R.id.free_hand_crop);
+        rotateImage=(Button)findViewById(R.id.rotate_image);
+        flipHorizontal=(Button)findViewById(R.id.flip_horizontal);
+        flipVertical=(Button)findViewById(R.id.flip_vertical);
+
         freeHandCrop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +71,27 @@ public class CropActivity extends AppCompatActivity {
                 intent.putExtra("imgUri", imageUri);
                 Log.d("Intent","Intent");
                 startActivity(intent);
+            }
+        });
+
+        rotateImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropView.RotateBitmap(90);
+            }
+        });
+
+        flipHorizontal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropView.flipHorizontalBitmap();
+            }
+        });
+
+        flipVertical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropView.flipVerticalBitmap();
             }
         });
     }

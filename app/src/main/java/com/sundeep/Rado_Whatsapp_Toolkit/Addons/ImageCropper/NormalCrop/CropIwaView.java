@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -41,6 +43,12 @@ public class CropIwaView extends FrameLayout {
     private CropSaveCompleteListener cropSaveCompleteListener;
 
     private CropIwaResultReceiver cropIwaResultReceiver;
+
+    private int rotateAngle=0;
+
+    private boolean flipHorizontal=false;
+
+    private boolean flipVertical=false;
 
     public CropIwaView(Context context) {
         super(context);
@@ -85,6 +93,35 @@ public class CropIwaView extends FrameLayout {
         gestureDetector = imageView.getImageTransformGestureDetector();
         addView(imageView);
     }
+    public void RotateBitmap(float angle) {
+        rotateAngle+=90;
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap source = drawable.getBitmap();
+        imageView.setImageBitmap(Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
+    }
+
+    public void flipHorizontalBitmap() {
+        flipHorizontal=!flipHorizontal;
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1.0f, 1.0f);
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap source = drawable.getBitmap();
+        imageView.setImageBitmap(Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
+    }
+
+    public void flipVerticalBitmap() {
+        flipVertical=!flipVertical;
+        Matrix matrix = new Matrix();
+        matrix.preScale(1.0f, -1.0f);
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap source = drawable.getBitmap();
+        imageView.setImageBitmap(Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
+    }
+
+
+
 
     private void initOverlayView() {
         if (imageView == null || overlayConfig == null) {
@@ -184,7 +221,7 @@ public class CropIwaView extends FrameLayout {
         CropIwaShapeMask mask = overlayConfig.getCropShape().getMask();
         CropIwaBitmapManager.get().crop(
                 getContext(), cropArea, mask,
-                imageUri, saveConfig);
+                imageUri, saveConfig,rotateAngle,flipHorizontal,flipVertical);
     }
 
     @Override
@@ -270,4 +307,7 @@ public class CropIwaView extends FrameLayout {
     public interface ErrorListener {
         void onError(Throwable e);
     }
+
+
+
 }

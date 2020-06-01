@@ -70,10 +70,10 @@ public class CropIwaBitmapManager {
 
     public void crop(
             Context context, CropArea cropArea, CropIwaShapeMask mask,
-            Uri uri, CropIwaSaveConfig saveConfig) {
+            Uri uri, CropIwaSaveConfig saveConfig, int rotateAngle,boolean flipHorizontal,boolean flipVertical) {
         CropImageTask cropTask = new CropImageTask(
                 context.getApplicationContext(),
-                cropArea, mask, uri, saveConfig);
+                cropArea, mask, uri, saveConfig, rotateAngle,flipHorizontal,flipVertical);
         cropTask.execute();
     }
 

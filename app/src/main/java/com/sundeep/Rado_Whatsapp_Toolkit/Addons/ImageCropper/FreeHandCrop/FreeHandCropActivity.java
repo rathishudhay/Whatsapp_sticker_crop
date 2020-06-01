@@ -54,7 +54,7 @@ public class FreeHandCropActivity extends AppCompatActivity {
             float height=tempBitmap.getHeight();
             float bitmapRatio=width/height;
 
-            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth(),getScreenWidth()/bitmapRatio);
+            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth()-100,(getScreenWidth()-100)/bitmapRatio);
         }
         mSomeView = new SomeView(this, mBitmap);
         LinearLayout layout = findViewById(R.id.layout);
@@ -79,7 +79,7 @@ public class FreeHandCropActivity extends AppCompatActivity {
             float width=tempBitmap.getWidth();
             float height=tempBitmap.getHeight();
             float bitmapRatio=width/height;
-            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth(),getScreenWidth()/bitmapRatio);
+            mBitmap = getResizedBitmap(tempBitmap,getScreenWidth()-100,(getScreenWidth()-100)/bitmapRatio);
 
 //            mPhotoEditor.addImage(bitmap);
         }catch(Exception e){
